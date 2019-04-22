@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import {Link} from 'react-router-dom'
+import { DebounceInput } from 'react-debounce-input';
 import * as BooksAPI from '../BooksAPI'
 import Book from './Book'
+import PropTypes from 'prop-types';
 
 class BookSearch extends Component {
   
@@ -11,7 +14,11 @@ class BookSearch extends Component {
             filteredBooks: []
         };
     };
-
+  
+  static propTypes = {
+        handleUpdateShelf: PropTypes.func.isRequired,
+        shelves: PropTypes.array.isRequired
+    };
 
   bookSearch = (query) => {
     	if (query){
@@ -27,31 +34,32 @@ class BookSearch extends Component {
     console.log(this.state.filteredBooks)
     }
 
-
   render (){
     const { shelves, handleUpdateShelf} = this.props
 	const { books } = this.state
 
     return (
     	<div className="search-books">
-            <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+            <div className="search-books-bar form-group">
+            	<Link className='close-search'
+                      to='/'>Close
+                  </Link>
               <div className="search-books-input-wrapper">
                 
-                <input type="text" placeholder="Search by title or author" onChange={(e) => this.bookSearch(e.target.value)}/>
+                <DebounceInput type="text" debounceTimeout={500} placeholder="Search by title or author" onChange={(e) => this.bookSearch(e.target.value)}/>
               </div>
             </div>
-            <div className="search-books-results">
-              <ol className="books-grid">
+            <div className="search-books-results container">
+              <div className="col-12 mt-4 card-deck">
 				{this.state.filteredBooks.map((book) => (
-                    <li key={book.id}>
+                    <div className="col-12 col-md-4 float-left" key={book.id}>
                         <Book 
                           book={book}
 						  handleUpdateShelf={ handleUpdateShelf }
                           />
-					</li>
+					</div>
 					))}
-			 </ol>
+			 </div>
             </div>
           </div>
 	)

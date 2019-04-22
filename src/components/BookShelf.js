@@ -9,20 +9,23 @@ class BookShelf extends Component {
 	render (){
       const { shelf, books, handleUpdateShelf} = this.props
 		return (
-          <div className="bookshelf">
-              <h2 className="bookshelf-title">{shelf.title}</h2>
-              <div className="bookshelf-books">
-                  <ol className="books-grid">
+          	<div className="row mt-4">
+          		<div className="col-12">
+          			<h3 className="text-info">{shelf.title}</h3>
+					<hr/>
+				</div>
+              	
+                  <div className="col-12 mt-4 card-deck">
 					{books.map((book) => (
-                    <li key={book.id}>
+                    <div className="col-12 col-md-4 float-left" key={book.id}>
                         <Book 
                           book={book}
 						  handleUpdateShelf={ handleUpdateShelf }
                           />
-					</li>
+					</div>
 					))}
-                  </ol>
-              </div>
+                  </div>
+
           </div>
 		)
 	}
