@@ -2,13 +2,17 @@ import React, { Component } from 'react'
 
 class Book extends Component {
   
+  	state = {
+      value: this.props.shelf
+  	}
+  
   	handleChange = (e) => {
-      let newShelf = e.target.value;
-      this.props.shelfChange(this, newShelf)
+      this.setState({ value:e.target.value})
+       this.props.handleUpdateShelf( this.props.book, e.target.value)
     }
 
 	render (){
-        const { book} = this.props
+        const { book } = this.props
 		return (
           <div className="book">
                               <div className="book-top">
@@ -19,7 +23,7 @@ class Book extends Component {
                                     }}>
                                   </div>
                                   <div className="book-shelf-changer">
-                                      <select onChange={this.handleChange} defaultValue={book.shelf}>
+                                      <select onChange={this.handleChange} value={ this.state.value}>
                                           <option value="move" disabled>Move to...</option>
                                           <option value="currentlyReading">Currently Reading</option>
                                           <option value="wantToRead">Want to Read</option>

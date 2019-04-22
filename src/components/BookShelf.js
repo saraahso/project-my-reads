@@ -7,7 +7,7 @@ class BookShelf extends Component {
   		super();
   	}
 	render (){
-      const { shelf, books} = this.props
+      const { shelf, books, handleUpdateShelf} = this.props
 		return (
           <div className="bookshelf">
               <h2 className="bookshelf-title">{shelf.title}</h2>
@@ -17,6 +17,7 @@ class BookShelf extends Component {
                     <li key={book.id}>
                         <Book 
                           book={book}
+						  handleUpdateShelf={ handleUpdateShelf }
                           />
 					</li>
 					))}

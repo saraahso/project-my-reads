@@ -7,16 +7,31 @@ import './App.css'
 
 class BooksApp extends React.Component {
 	state = {
-   		books: []
-  	}
+   		books: [],
+    	shelves: [
+          { key: 'currentlyReading', title: 'Currently Reading' },
+          { key: 'wantToRead', title: 'Want to Read' },
+          { key: 'read', title: 'Read' }
+  		]
+  }
 
 	componentDidMount() {
-    BooksAPI.getAll().then((books) => {
-      this.setState({
-          books: books
-      });
-    })
-  }
+      BooksAPI.getAll().then((books) => {
+        this.setState({
+            books: books
+        });
+      })
+    }
+
+ 	handleUpdateShelf = (book, shelf) => {
+    	book.shelf = shelf
+      	BooksAPI.update(book, shelf)
+      		.then( updated => (BooksAPI.getAll().then((books) => {
+        		this.setState({
+                  books: books
+               	});
+        })))
+    }
 
   render() {
     console.log(this.state.books)
@@ -24,7 +39,10 @@ class BooksApp extends React.Component {
     
       <div className="app">
         <Route exact path="/" render={() => (
-    		<BookList books={this.state.books} />
+    		<BookList 
+      			books={this.state.books}
+				shelves={this.state.shelves}
+      			handleUpdateShelf={ this.handleUpdateShelf }/>
     	)} />
 		<Route path="/search" render={({history}) => (
         	<BookSearch />
