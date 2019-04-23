@@ -4,8 +4,9 @@ import BookSearch from './components/BookSearch'
 import BookList from './components/BookList'
 import { Route } from 'react-router-dom'
 import { library } from '@fortawesome/fontawesome-svg-core'
+// eslint-disable-next-line
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBook, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
+import { faBook } from '@fortawesome/free-solid-svg-icons';
 import './App.css'
 
 library.add(faBook)
@@ -44,14 +45,10 @@ class BooksApp extends React.Component {
     
       <div className="app">
         <Route exact path="/" render={() => (
-      			
     		<BookList 
       			books={this.state.books}
 				shelves={this.state.shelves}
       			handleUpdateShelf={ this.handleUpdateShelf }/>
-
-			
-      		
     	)} />
 		<Route path="/search" render={({history}) => (
         	<BookSearch 

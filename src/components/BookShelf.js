@@ -3,9 +3,6 @@ import Book from './Book'
 
 class BookShelf extends Component {
   
-  	constructor(){
-  		super();
-  	}
 	render (){
       const { shelf, books, handleUpdateShelf} = this.props
 		return (

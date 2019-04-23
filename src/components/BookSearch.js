@@ -35,7 +35,8 @@ class BookSearch extends Component {
     }
 
   render (){
-    const { shelves, handleUpdateShelf} = this.props
+    const { handleUpdateShelf } = this.props
+	// eslint-disable-next-line
 	const { books } = this.state
 
     return (

@@ -1,22 +1,32 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
+import Notifications, {notify} from 'react-notify-toast';
 
+/* eslint-disable */
 class Book extends Component {
   
   	state = {
       value: this.props.shelf
   	}
+
+	static propTypes = {
+        book: PropTypes.object.isRequired,
+        handleChange: PropTypes.func.isRequired
+    };
   
   	handleChange = (e) => {
       this.setState({ value:e.target.value})
-       this.props.handleUpdateShelf( this.props.book, e.target.value)
+      this.props.handleUpdateShelf( this.props.book, e.target.value)
+      notify.show('The book is now at new shelf!', "success" )
     }
 
 	render (){
         const { book } = this.props
 		return (
-          
+         
 			<div>
-				<div className="card p-1 mt-3">
+          		<Notifications />
+				<div className="card p-1 mt-3 mb-3">
           			<div className="row">
           				<div className="col-12 col-md-5">
                       		<img className="mx-auto position-relative" src={book.imageLinks.thumbnail} />	
