@@ -2,7 +2,8 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import BookSearch from './components/BookSearch'
 import BookList from './components/BookList'
-import { Route } from 'react-router-dom'
+import NotFound from './NotFound';
+import { Route, Switch, BrowserRouter } from 'react-router-dom'
 import { library } from '@fortawesome/fontawesome-svg-core'
 // eslint-disable-next-line
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -32,29 +33,31 @@ class BooksApp extends React.Component {
  	handleUpdateShelf = (book, shelf) => {
     	book.shelf = shelf
       	BooksAPI.update(book, shelf)
-      		.then( updated => (BooksAPI.getAll().then((books) => {
-        		this.setState({
-                  books: books
-               	});
-        })))
+      		.then(()  => {
+        		this.setState({books: this.state.books.filter((item) => item.id !== book.id).concat([book])})
+        })
     }
 
   render() {
-    console.log(this.state.books)
     return (
     
       <div className="app">
-        <Route exact path="/" render={() => (
-    		<BookList 
-      			books={this.state.books}
-				shelves={this.state.shelves}
-      			handleUpdateShelf={ this.handleUpdateShelf }/>
-    	)} />
-		<Route path="/search" render={({history}) => (
-        	<BookSearch 
-          		books={this.state.books}
-				handleUpdateShelf={ this.handleUpdateShelf }/>
-        )} />
+       <BrowserRouter>
+			<Switch>
+              	<Route exact path="/" render={() => (
+                  <BookList 
+                      books={this.state.books}
+                      shelves={this.state.shelves}
+                      handleUpdateShelf={ this.handleUpdateShelf }/>
+              	)} />
+              	<Route path="/search" render={({history}) => (
+                  <BookSearch 
+                      books={this.state.books}
+                      handleUpdateShelf={ this.handleUpdateShelf }/>
+              	)} />
+				<Route path="*" component={NotFound} />
+			</Switch>
+		</BrowserRouter>
 	   </div>
     )
   }

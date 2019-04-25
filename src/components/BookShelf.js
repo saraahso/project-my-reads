@@ -12,9 +12,9 @@ class BookShelf extends Component {
 					<hr/>
 				</div>
               	
-                  <div className="col-12 mt-4 card-deck">
+                  <div className="row mt-4 p-2 card-deck">
 					{books.map((book) => (
-                    <div className="col-12 col-md-4 float-left" key={book.id}>
+                    <div className="col-xs-12 col-md-4" key={book.id}>
                         <Book 
                           book={book}
 						  handleUpdateShelf={ handleUpdateShelf }

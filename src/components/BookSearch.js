@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import { DebounceInput } from 'react-debounce-input';
 import * as BooksAPI from '../BooksAPI'
 import Book from './Book'
-import PropTypes from 'prop-types';
+import Notifications, {notify} from 'react-notify-toast';
 
 class BookSearch extends Component {
   
@@ -14,33 +14,42 @@ class BookSearch extends Component {
             filteredBooks: []
         };
     };
-  
-  static propTypes = {
-        handleUpdateShelf: PropTypes.func.isRequired,
-        shelves: PropTypes.array.isRequired
-    };
+
 
   bookSearch = (query) => {
     	if (query){
         	BooksAPI.search(query)
           		.then((books) => {
-            		this.setState((currentState) => ({
-                    	filteredBooks: books
-                    }))
+              		if(books.length > 0) {
+                      books.map(book => 
+                      	this.props.books.filter((item) => 
+                        	item.id === book.id).map((item) => 
+                            	book.shelf = item.shelf
+                      ))
+                      this.setState((currentState) => ({
+                          filteredBooks: books
+                      }))
+                    }
+                    if(this.state.filteredBooks.error === 'empty query'){
+                      this.setState({filteredBooks: []})
+                      notify.show('We can\'t find your search.', "error" )
+                    }
+              
+              	  
+              	  console.log( books)
             	})
-        } else{
-          	this.setState({filteredBooks: []})
         }
-    console.log(this.state.filteredBooks)
     }
+
+  
 
   render (){
     const { handleUpdateShelf } = this.props
 	// eslint-disable-next-line
-	const { books } = this.state
-
+	const { books, shelf } = this.state
     return (
     	<div className="search-books">
+      		<Notifications />
             <div className="search-books-bar form-group">
             	<Link className='close-search'
                       to='/'>Close
@@ -51,16 +60,18 @@ class BookSearch extends Component {
               </div>
             </div>
             <div className="search-books-results container">
-              <div className="col-12 mt-4 card-deck">
-				{this.state.filteredBooks.map((book) => (
-                    <div className="col-12 col-md-4 float-left" key={book.id}>
-                        <Book 
-                          book={book}
-						  handleUpdateShelf={ handleUpdateShelf }
-                          />
-					</div>
-					))}
-			 </div>
+				{(this.state.filteredBooks && this.state.filteredBooks.length > 0) &&
+                  <div className="row mt-4 p-2 card-deck">
+                    {this.state.filteredBooks.map((book) => (
+                        <div className="col-xs-12 col-md-4" key={book.id}>
+                            <Book 
+                              book={book}
+                              handleUpdateShelf={handleUpdateShelf}
+                              />
+                        </div>
+                        ))}
+                 </div> }
+
             </div>
           </div>
 	)
